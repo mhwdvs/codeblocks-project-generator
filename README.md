@@ -15,5 +15,5 @@ The CMake CodeBlocks generators (eg. `CodeBlocks - Unix Makefiles`) produce Code
 
 ## Issues
 
-- Currently doesn't add any non-code files into the CodeBlocks project, so data files, config files etc. May need to copied in manually
+- Non-code files (such as data files) are not added to binary dirs, so data may not be accessible to your builds by default
 - Default compiler is GCC, with few build arguments given. No way to generate for other compilers with this script right now
