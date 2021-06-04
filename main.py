@@ -26,8 +26,11 @@ def path_leaf(path):
 def main():
     # check current path for any .cbp files
     path = pathlib.Path().absolute().__str__() + "/"
-    print("Current working dir: " + path)
     dest_folder = "codeblocks/"
+    src_folder = "src/"
+    print("Current working dir: " + path)
+    print("Source dir: " + src_folder)
+    print("Dest dir: " + dest_folder)
 
     # remove old project if it exists
     dirpath = pathlib.Path(dest_folder)
@@ -79,20 +82,13 @@ def main():
 </CodeBlocks_project_file>
     """
 
-    source_files = []
-    header_files = []
-    source_files.extend(search_file_recursive(path + "**/" + "*.cpp"))
-    source_files.extend(search_file_recursive(path + "**/" + "*.c"))
-    header_files.extend(search_file_recursive(path + "**/" + "*.h"))
-
-    all_files = []
-    all_files.extend(source_files)
-    all_files.extend(header_files)
+    # copy all files in source dir to codeblocks dir
+    source_files = search_file_recursive(path + "**/" + src_folder + "*")
 
     cbp_units = []
-    # copy all files to codeblocks project
+    # copy all file paths into codeblocks project file
     os.makedirs(os.path.dirname(dest_folder), exist_ok=True)
-    for file in all_files:
+    for file in source_files:
         rel_path = relative_path(path, file)
         print("Copying file \n\n" + file + " to \n\n" + dest_folder + rel_path + "\n")
         os.makedirs(os.path.dirname(dest_folder + rel_path), exist_ok=True)
