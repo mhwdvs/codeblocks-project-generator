@@ -5,7 +5,7 @@ Searches current directory for all C/C++ source and header files, and rams them 
 
 Tested using Python 3.8
 
-- Navigate to the root of your project's directory
+- Navigate to the root of your project's directory. Your project must have a `src/` folder (can be configured by editing script) with all your required source files contained inside
 - Run `python3 main.py` or `python3 ../path/to/main.py` 
 - A new CodeBlocks project will be produced in folder `codeblocks/`. Test to ensure everything went smoothly
 
@@ -15,5 +15,5 @@ The CMake CodeBlocks generators (eg. `CodeBlocks - Unix Makefiles`) produce Code
 
 ## Issues
 
-- Currently doesn't add any non-code files into the CodeBlocks project, so data files, config files etc. May need to copied in manually
+- Non-code files (such as data files) are not added to binary dirs, so data may not be accessible to your builds by default
 - Default compiler is GCC, with few build arguments given. No way to generate for other compilers with this script right now
