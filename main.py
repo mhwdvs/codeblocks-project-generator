@@ -84,30 +84,40 @@ def main():
     """
 
     # copy all files in source dir to codeblocks dir
-    source_files = search_file_recursive(path + "**/" + src_folder + "*")
+    source_files = search_file_recursive(path + src_folder + "**/" + "*")
 
     # copy all file paths into codeblocks project file
     print("")
     os.makedirs(os.path.dirname(dest_folder), exist_ok=True)
     cbp_units = []
     for file in source_files:
-        rel_path = relative_path(path, file)
-        print("Copying file \n" + file + " to \n" + dest_folder + rel_path + "\n")
-        os.makedirs(os.path.dirname(dest_folder + rel_path), exist_ok=True)
-        shutil.copy(file, dest_folder + rel_path)
-        cbp_units.append("<Unit filename=\"" + rel_path + "\"/>\n")
+        try:
+            rel_path = relative_path(path, file)
+            print("Copying file \n" + file + " to \n" + dest_folder + rel_path + "\n")
+            os.makedirs(os.path.dirname(dest_folder + rel_path), exist_ok=True)
+            shutil.copy(file, dest_folder + rel_path)
+            cbp_units.append("<Unit filename=\"" + rel_path + "\"/>\n")
+        except IsADirectoryError as e:
+            print(e)
 
     # copy non-code files into binary dirs (to make data files available to binaries)
     print("Copying non-code files to binary dirs!\n")
     for file in source_files:
-        if not file.split(".")[1] in src_file_extensions:
-            rel_path = relative_path(path, file)
-            print("Copying file \n" + file + " to \n" + dest_folder + "bin/Debug/" + rel_path + "\n")
-            print("Copying file \n" + file + " to \n" + dest_folder + "bin/Release/" + rel_path + "\n")
-            os.makedirs(os.path.dirname(dest_folder + "bin/Debug/" + rel_path), exist_ok=True)
-            os.makedirs(os.path.dirname(dest_folder + "bin/Release/" + rel_path), exist_ok=True)
-            shutil.copy(file, dest_folder + "bin/Debug/" + rel_path)
-            shutil.copy(file, dest_folder + "bin/Release/" + rel_path)
+        try:
+            if not file.split(".")[1] in src_file_extensions:
+                rel_path = relative_path(path + "src/", file)
+                # remove source dir from rel_path
+                print("Copying file \n" + file + " to \n" + dest_folder + rel_path + "\n")
+                print("Copying file \n" + file + " to \n" + dest_folder + "bin/Debug/" + rel_path + "\n")
+                print("Copying file \n" + file + " to \n" + dest_folder + "bin/Release/" + rel_path + "\n")
+                os.makedirs(os.path.dirname(dest_folder + rel_path), exist_ok=True)
+                os.makedirs(os.path.dirname(dest_folder + "bin/Debug/" + rel_path), exist_ok=True)
+                os.makedirs(os.path.dirname(dest_folder + "bin/Release/" + rel_path), exist_ok=True)
+                shutil.copy(file, dest_folder + rel_path)
+                shutil.copy(file, dest_folder + "bin/Debug/" + rel_path)
+                shutil.copy(file, dest_folder + "bin/Release/" + rel_path)
+        except IndexError as e:
+            print(e)
 
     # write cbp file
     with open(dest_folder + "main.cbp", 'w') as file:
