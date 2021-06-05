@@ -15,5 +15,5 @@ The CMake CodeBlocks generators (eg. `CodeBlocks - Unix Makefiles`) produce Code
 
 ## Issues
 
-- Non-code files (such as data files) are not added to binary dirs, so data may not be accessible to your builds by default
+- Non-code files (such as data files) are naively copied into binary dirs to make them accessible to executables. If you wanted to make some files ending in a source code extension (`.c`, `.cpp`, `.h` etc.) then you would have to copy them in manually. If you didn't want these files in your binary dir, you have to delete them manually (if it bothers you, just hedging that you *probably do* want these files available to your binaries)
 - Default compiler is GCC, with few build arguments given. No way to generate for other compilers with this script right now
